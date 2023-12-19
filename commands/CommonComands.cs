@@ -1,6 +1,6 @@
 ﻿namespace OBDIIToolKit
 {
-    public static class CommandFactory
+    public static class CommonComands
     {
         public static Command CreateFaultsAndImReadinessCommand()
         {

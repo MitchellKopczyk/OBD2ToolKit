@@ -6,14 +6,12 @@
         {
             string[] parts = response.Split(' ');
 
-            byte thirdByte = Convert.ToByte(parts[3], 16); // Fourth byte (engine type)
-            byte fourthByte = Convert.ToByte(parts[4], 16); // Fifth byte (test ability)
-            byte fifthByte = Convert.ToByte(parts[5], 16); // Sixth byte (test completeness)
+            byte thirdByte = Convert.ToByte(parts[3], 16);
+            byte fourthByte = Convert.ToByte(parts[4], 16);
+            byte fifthByte = Convert.ToByte(parts[5], 16);
 
-            // Get the 3rd bit of the 3rd byte
             int bitValue = (thirdByte >> 2) & 1;
 
-            // Determine if the bit is set to Spark or Diesel
             var engineType = bitValue == 1 ? "Spark-ignited" : "Compression-ignited";
 
             var readinessDict = new Dictionary<string, string>();
@@ -40,7 +38,6 @@
                     readinessDict.Add(emissionTestsDiesel[i], $"{testAbility}, {testCompleteness}");
                 }
             }
-
             return readinessDict;
         }
     }

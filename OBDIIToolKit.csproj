@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="32feet.NET" Version="3.5.0" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="7.0.9" />
     <PackageReference Include="System.IO.Ports" Version="7.0.0" />
     <PackageReference Include="System.IO" Version="4.3.0" />
@@ -20,8 +21,5 @@
 
   <ItemGroup>
     <None Remove="polling\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="polling\" />
   </ItemGroup>
 </Project>

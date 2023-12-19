@@ -1,5 +1,4 @@
-﻿
-using System.IO.Ports;
+﻿using System.IO.Ports;
 using OBDIIToolKit;
 
 class Program
@@ -19,25 +18,23 @@ class Program
 
             ELM327Controller.DebugMode = true;
 
-            ICommand setProtocol = CommandFactory.CreateSetProtocolToAutoCommand();
+            ICommand setProtocol = CommonComands.CreateSetProtocolToAutoCommand();
             await setProtocol.Execute(serial);
 
 
-            //Use a command to fetch the data
-            ICommand faultsAndImReadinessCommand = CommandFactory.CreateFaultsAndImReadinessCommand();
+            ICommand faultsAndImReadinessCommand = CommonComands.CreateFaultsAndImReadinessCommand();
             string data = await faultsAndImReadinessCommand.Execute(serial);
 
-            //Get the Number of faults from the data
+
             int numberOfFaults = Fault.RetrieveNumberOfFaultCodes(data);
             Console.WriteLine("Number of faults: " + numberOfFaults);
 
                 
-            // If there are faults, retrieve fault data and print them
             if (numberOfFaults > 0)
             {
                 Fault fault = new Fault();
 
-                ICommand getFaultMemoryCommand = CommandFactory.CreateGetFaultMemoryCommand();
+                ICommand getFaultMemoryCommand = CommonComands.CreateGetFaultMemoryCommand();
                 string faultData = await getFaultMemoryCommand.Execute(serial);
 
                 List<(string FaultCode, string Description)> faults = await fault.GetFaultMemoryAsync(faultData);
@@ -51,8 +48,6 @@ class Program
                 Console.WriteLine("No Fault Codes detected.");
             }
                 
-
-            // Retrieve Emission Readiness to see if we will pass Emission testing
             var readinessData = Emissions.RetrieveEmissionReadinessData(data);
             foreach (var pair in readinessData)
             {

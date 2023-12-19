@@ -12,7 +12,6 @@ namespace OBDIIToolKit
         {
             string[] parts = response.Split(' ');
 
-            // Get the number of fault codes.
             int numberFaultCodes = Convert.ToInt32(parts[2], 16);
 
             if (numberFaultCodes > 128)
@@ -33,14 +32,9 @@ namespace OBDIIToolKit
             _dbConnection = new SqliteConnection("Data Source=Diagnostic Trouble Codes;Version=3;");
             _dbConnection.Open();
 
-            // As long as we have at least one fault code left in the dump (one code is 4 hexadecimal characters)...
             while (faultCodeDump.Length >= 4)
             {
-                // Take the first four characters from the dump which represent one fault code
                 string faultTempBuffer = faultCodeDump.Substring(0, 4);
-
-                // Determine the category of the fault based on the first character of the code
-                // Then append the rest of the code
                 string faultCode = DetermineFaultCategory(faultTempBuffer[0]) + faultTempBuffer[1..];
 
                 string tableName = faultCode[0] switch
@@ -62,8 +56,6 @@ namespace OBDIIToolKit
                 {
                     faultList.Add((faultCode, "No Description Found"));
                 }
-
-                // Remove the processed fault code from the dump
                 faultCodeDump = faultCodeDump[4..];
             }
 

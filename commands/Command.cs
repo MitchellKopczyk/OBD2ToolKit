@@ -2,24 +2,21 @@
 {
     public class Command : ICommand
     {
-        private static int commandCount = 0;
 
-        public string id { get; }  // this is the unique ID
-        public string rawId { get; }  // this is the original PID
+        public string pid { get; }
         private readonly Func<string, bool> validator;
         private readonly int timeout;
 
         public Command(string pid, Func<string, bool> validator, int timeout)
         {
-            rawId = pid;
-            id = pid + "_" + commandCount++;
+            this.pid = pid;
             this.validator = validator;
             this.timeout = timeout;
         }
 
         public async Task<string> Execute(ICommunicator communication)
         {
-            return await SendCommand(communication, id, validator);
+            return await SendCommand(communication, pid, validator);
         }
 
         private async Task<string> SendCommand(ICommunicator communication, string pid, Func<string, bool> responseValidator)

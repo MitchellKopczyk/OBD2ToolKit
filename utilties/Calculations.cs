@@ -1,5 +1,4 @@
-﻿using System;
-namespace OBDIIToolKit.features
+﻿namespace OBDIIToolKit.features
 {
 	public static class Calculations
 	{

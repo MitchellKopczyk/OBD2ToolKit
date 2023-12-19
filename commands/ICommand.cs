@@ -2,8 +2,7 @@
 {
     public interface ICommand
     {
-        string id { get; }
-        string rawId { get; }
+        string pid { get; }
         Task<string> Execute(ICommunicator communication);
     }
 }
