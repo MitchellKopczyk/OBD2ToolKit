@@ -12,7 +12,12 @@ class Program
     async Task RunAsync()
     {
 
-        using (var serial = new SerialCommunicator("/dev/tty.usbserial-113010763101", 115200, Parity.None, 8))
+    }
+}
+
+
+/*
+ *         using (var serial = new SerialCommunicator("/dev/tty.usbserial-113010763101", 115200, Parity.None, 8))
         {
             await serial.ConnectAsync();
 
@@ -57,5 +62,4 @@ class Program
                 
             serial.Disconnect();
         }
-    }
-}
+*/
