@@ -1,32 +1,63 @@
-﻿
-# OBD-II Reader
+# OBDIIToolKit
 
-This project is a library that simplifies communication with a vehicle's On-Board Diagnostics (OBD-II) system using an ELM327 device. The core of this library is the `ELM327` class, which communicates with the device using commands defined by the OBD-II protocol.
+The OBDIIToolKit is a C# library designed to simplify communication with OBD-II (On-Board Diagnostics) devices. This library provides modules for communication, executing commands, and handling responses, supporting both serial and Bluetooth communication protocols.
 
-This library is designed to allow for flexibility in the communication mechanism. The `ELM327` class depends on an `ISerialPort` interface, which can be implemented for different communication mechanisms such as serial ports, Bluetooth, or others.
+## Core Components
 
-## Components
+### 1. Communication Module
 
-The library consists of the following main components:
+#### 1.1 ICommunicator Interface
 
-1. **`ISerialPort` Interface**: This interface provides a contract for serial communication with the ELM327 device. Implementations of this interface could provide communication over USB, Bluetooth, etc.
+Defines the basic contract for communication. Methods include ConnectAsync, Disconnect, Write, ReadString, and Dispose.
 
-2. **`ELM327` Class**: This class is responsible for sending commands to the ELM327 device, reading the response and translating that response into a usable format. It depends on an implementation of the `ISerialPort` interface for the actual data transfer.
+#### 1.2 SerialCommunicator Class
 
-3. **`OBDIIInterpreter` Class**: This class is a data interpreter which uses a dictionary of command handlers. Each command handler knows how to interpret the response from a specific OBD-II command.
+Implements the ICommunicator interface for serial communication. Uses the SerialPort class for serial communication.
 
-4. **`Emissions` Class**: This class provides a method to retrieve emission readiness data from a given response. The response is interpreted to determine the status of the various emission-related systems in the vehicle.
+#### 1.3 BluetoothCommunicator Class
 
-5. **`Fault` Class**: This class provides methods to handle fault codes. It includes functionality for determining the number of fault codes, and for retrieving descriptions of fault codes from a database.
+Implements the ICommunicator interface for Bluetooth communication. Uses the BluetoothClient class for Bluetooth communication.
 
-## Design Notes
+#### 1.4 BluetoothDeviceDiscoverer Class
 
-1. **Interface Segregation**: The `ISerialPort` interface is a key part of the design, segregating the communication mechanism from the OBD-II command/response logic. This means that the `ELM327` class is not tied to a specific communication mechanism, and can be used with a USB-based serial port, a Bluetooth-based serial port, or any other communication mechanism.
+Discovers Bluetooth devices using the InTheHand.Net.Sockets library.
 
-2. **Dependency Injection**: The `ELM327` class receives an instance of `ISerialPort` in its constructor. This is an example of dependency injection, and it means that the `ELM327` class doesn't need to know how to construct an `ISerialPort` instance.
+### 2. ELM327 Controller
 
-3. **Single Responsibility**: Each class in the library has a single responsibility. For example, the `ELM327` class is responsible for communicating with the ELM327 device, but not for interpreting the responses. The `OBDIIInterpreter` class is responsible for interpreting responses.
+#### 2.1 ELM327Controller Class
 
-4. **Command Pattern**: The `OBDIIInterpreter` class uses the command pattern to handle responses. Each command handler is a delegate that knows how to handle a specific type of response.
+Provides utility methods for sending commands, reading responses, and handling timeouts. Supports debug mode to print communication details to the console.
 
-5. **Database Access**: The `Fault` class uses a SQLite database to retrieve descriptions of fault codes. This shows how the library can integrate with a database to provide more detailed information.
+### 3. OBD-II Commands
+
+#### 3.1 ICommand Interface
+
+Defines the contract for OBD-II commands. Includes the pid property and Execute method.
+
+#### 3.2 Command Class
+
+Implements the ICommand interface. Represents an OBD-II command with a specific PID (Parameter ID). Executes the command and validates the response using a provided validator function.
+
+#### 3.3 CommonCommands Class
+
+Provides factory methods for creating common OBD-II commands. Examples include fault code retrieval, setting the protocol to auto, and retrieving engine load.
+
+### 4. Emissions Module
+
+#### 4.1 Emissions Class
+
+Parses and interprets OBD-II responses related to emission readiness. Categorizes emission tests and their readiness status.
+
+### 5. Fault Code Handling
+
+#### 5.1 Fault Class
+
+Retrieves and interprets fault codes from OBD-II responses. Uses an SQLite database to map fault codes to descriptions and categories.
+
+## Getting Started
+
+To use the OBDIIToolKit library, follow these steps:
+
+1. Clone the repository.
+2. Reference the OBDIIToolKit project in your C# solution.
+3. Use the provided classes and modules to communicate with OBD-II devices.
